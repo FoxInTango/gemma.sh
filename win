@@ -1,0 +1,50 @@
+# https://learn.microsoft.com/zh-cn/powershell/module/packagemanagement/find-package?view=powershellget-2.x
+#  PowerShellGet
+#  PackageManagement
+#!/bin/bash
+# PowerShell : Set-VMVideo -VMName 'VM Name' -HorizontalResolution 1920 -VerticalResolution 1080 -ResolutionType Single
+# grub.cfg   : video=hyperv_fb:1920x1080
+
+# Documents:
+# Windows Admin Center
+#     https://learn.microsoft.com/zh-cn/windows-server/manage/windows-admin-center/overview
+# Power Shell Module:
+#     VM :
+#         https://learn.microsoft.com/en-us/powershell/module/hyper-v
+#     VM GPU:
+#         1, nvidia-smi : NVIDIA GeForce GTX 750 Ti
+#         2, Get-PnpDevice -FriendlyName "NVIDIA GeForce GTX 750 Ti"  || Get-PnpDevice | Where-Object { $_.FriendlyName -like "*NVIDIA*" }
+#         3, Import-Module Hyper-V && Get-Command -Module Hyper-V  : Get-VMHostPartitionableGpu not found.
+#         4, Get-VMHostPartitionableGpu | FL Name,ValidPartitionCounts 
+#             https://learn.microsoft.com/en-us/powershell/module/hyper-v/get-vmgpupartitionadapter
+#         5, Assign GPU to VM : https://learn.microsoft.com/zh-cn/windows-server/virtualization/hyper-v/partition-assign-vm-gpu?tabs=powershell
+#             Set-VMHostPartitionableGpu -Name "PCI\VEN_10DE&DEV_1380&SUBSYS_36491458&REV_A2" -PartitionCount 4
+# https://zhuanlan.zhihu.com/p/3003643165 GPU
+# https://www.libmbr.com/archives/493/
+# https://github.com/MBRjun/MBRjun-Blog/discussions/73 
+
+# Get-VMAssignableDevice
+# Get-VMHostAssignableDevice
+# Get-Command -Module Hyper-V
+# Import-Module Hyper-V
+# Get-VMHostPartitionableGpu | FL Name,ValidPartitionCounts,PartitionCount
+# Get-VMGpuPartitionAdapter -VMName CORE_WEB_SYSTEM_Allinone
+# Set-VMHostPartitionableGpu -Name "PCI\VEN_10DE&DEV_1380&SUBSYS_36491458&REV_A2" -PartitionCount 4
+# Get-VMGpuPartitionAdapter -VMName CORE_WEB_SYSTEM_Allinone | FL InstancePath,PartitionId,PartitionVfLuid
+# Remove-VMGpuPartitionAdapter
+# Remove-VMHostPartitionableGpu
+# Get-PnpDevice | Where-Object { $_.FriendlyName -like "*AMD*" }
+# Get-PnpDevice -FriendlyName "NVIDIA GeForce GTX 750 Ti"
+# nvidia-smi
+# Get-PnpDevice -FriendlyName "NVIDIA"
+# VMGpuPartitionAdapter
+# Get-WmiObject Win32_VideoController
+# Get-VMGpuPartitionAdapter -VMName "CORE_WEB_SYSTEM_Allinone" | FL InstancePath, Id, SupportsOutgoingLiveMigration
+# Set-VM -VMName CORE_WEB_SYSTEM_Allinone -GuestControlledCacheTypes $true -LowMemoryMappedIoSpace 1GB -HighMemoryMappedIoSpace 32GB
+# Set-ExecutionPolicy RemoteSigned -Scope Process -Force
+# Install-WindowsFeature -Name Hyper-V -IncludeManagementTools
+# Set-VMVideo -VMName 'CORE_WEB_SYSTEM_Allinone' -HorizontalResolution 1920 -VerticalResolution 1080 -ResolutionType Single
+# Find-Package -ProviderName NuGet
+# Get-NetAdapter | Where-Object {$_.InterfaceDescription -like "*Hyper-V Virtual*" }
+# Rename-NetAdapter -Name AlpineII -NewName WHOAMI -Confirm:$false
+# 

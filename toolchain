@@ -1,0 +1,55 @@
+#!/bin/bash
+# gcc g++ make cmake meson mingw-w64 arm-none-eabi-gcc
+# 
+shell_cmd=$(basename $0)
+shell_dir=$(dirname  $0)
+shell_pwd=$(pwd)
+
+. ${shell_dir}/include/headers
+
+if [ ${shell_cmd} == "toolchain" ]; then
+    shell_cmd="toolchain.echo"
+fi
+
+gemma_tools="gcc g++ mingw-w64 armnone-eabi-gcc cmake meson"
+
+case ${shell_cmd} in
+    toolchain.prepare)
+        case ${gemma_pack_man} in
+        gemma)
+        echo "Gemma Installing ::$1:: whith gemma"
+        #sudo gemma install ${gemma_tools}
+        ;;
+        pacman)
+        echo "Gemma Installing ::$1:: whith pacman"
+        sudo pacman -S ${gemma_tools}
+        ;;
+        apt)
+        echo "Gemma Installing ::$1:: whith apt"
+        sudo apt install ${gemma_tools}
+        ;;
+        dnf)
+        echo "Gemma Installing ::$1:: whith dnf"
+        sudo dnf install ${gemma_tools}
+        ;;
+        yum)
+        echo "Gemma Installing ::$1:: whith yum"
+        sudo yum install ${gemma_tools}
+        ;;
+        *)
+        ;;
+        esac
+    ;;
+    toolchain.update) # update all tools 
+    ;;
+    toolchain.remove) # remove a single tool
+    ;;
+    toolchain.uninstall) # remove all tools listed by ${gemma_tools}
+    ;;
+    toolchain.echo)
+    echo "action should be selected as toolchain.***"
+    ;;
+    *)
+    echo "I don't know what to do."
+    ;;
+esac

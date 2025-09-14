@@ -1,0 +1,37 @@
+#!/usr/bin/bash
+shell_cmd=$(basename $0)
+shell_dir=$(dirname  $0)
+shell_pwd=$(pwd)
+
+. ${shell_dir}/include/headers
+
+# wf init --src=${path-to-src_dir} --dst={path-to-dst_dir} --method=wf|git|rsync
+#    init --bare                   --dst={path-to-dst_dir} --method=wf|git|rsync
+# wf branch
+#    branch --dst=${path-to-dst_dir}
+#    branch lookup
+# wf merge  --src=${path-to-src_dir} --dst={path-to-dst_dir}
+#    merge  --src=${path-to-src_dir}
+# wf tag 
+#    tag lookup regex= | time=time-begin - time-end
+#    tag checkout
+# wf pull
+# wf push
+# wf build -wf=${path-to-workfolder-file} | --workfolder-file=${path-to-workfolder-file}
+#           -o=${path-to-output_dir}      | --output=${path-to-output_dir}
+#
+# wf -wf=${path-to-workfolder-file}
+# 
+# workfolder file -- .wf
+#
+#
+case ${shell_cmd} in
+    wf.init)
+    ;;
+    wf.server)
+    ;;
+    wf.timemachine)
+    ;;
+    *)
+    ;;
+esac

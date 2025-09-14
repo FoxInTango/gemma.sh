@@ -1,0 +1,250 @@
+#!/usr/bin/bash
+
+shell_cmd=$(basename $0)
+shell_dir=$(dirname  $0)
+shell_pwd=$(pwd)
+
+. ${shell_dir}/include/headers
+
+#
+# timemachine 
+# -ts=${path-to-task-src}         | --task-src=${path-to-task-src} 
+# -td=${path-to-task-dst}         | --task-dst=${path-to-task-dst}
+#[-ld=${path-to-link-dst}         | --link-dst=${path-to-link-dst}]
+# -lf=${path-to-log_file}         | --log-file=${path-to-log-file}
+# -ld=${path-to-log_dir}          | --log-dir=${path-to-log-dir}
+# -df=${date-format-string}       | --date-format=$${date-format-string}  Such as :  +%Y-%m-%d-%H%M%S >>  2021-07-23-170950
+#date_str="2021-07-23-170950"
+#date_new="${date_str:0:10} ${date_str:11:2}:${date_str:13:2}:${date_str:15:2}"
+#echo "date str  : ${date_str}"
+#echo "date new  : ${date_new}"
+#echo "datestamp : $(date -d "$date_new" +%s)"
+#echo "$(timestamp)"
+#### -r | --reverse
+# -i | --init
+# -l | --list
+#
+# -tf=${path-to-timemachine-file} | --timemachine-file=${path-to-timemachine-file}
+# timemachine.tf [*.tf -- timemachine file]
+#    ft=${file-type-<task>|<history>}
+#    lf=${path-to-log-file}
+#    ld=${path-to-log-dir}
+#    df=${date-format-string}
+#    task ts=${path-to-task-src} td=${path-to-task-dst} [ld=${path-to-link-dst}] [tl=${path-to-task-log} type=${task-type:backup | recovery}
+#    task ts=${path-to-task-src} td=${path-to-task-dst} [ld=${path-to-link-dst}] [tl=${path-to-task-log}
+#    task ts=${path-to-task-src} td=${path-to-task-dst} [ld=${path-to-link-dst}] [tl=${path-to-task-log}
+#    task ts=${path-to-task-src} td=${path-to-task-dst} [ld=${path-to-link-dst}] [tl=${path-to-task-log}
+#<< 'EOF' # task.tf -- timemachine file 
+#ft=task
+#tl=
+#EOF
+
+#<< 'EOF' # source infomation for dst
+#EOF
+
+### Usages ###
+# usage model
+
+TM_USAGES_TITLE="Timemachine Usages:"
+TM_USAGE_BACKUP_TITLE=${INDENT_COLON_32:0:2}'Backup'
+TM_USAGE_BACKUP="\
+${INDENT_COLON_32:0:4}timemachine -tf=${path_to_timemachine_file}${ECHO_LF}\
+${INDENT_COLON_32:0:4}timemachine -ts=${path_to_task_src} -td=${path_to_task_dst}"
+TM_USAGE_RECOVERY_TITLE=${INDENT_COLON_32:0:2}'Recovery'
+TM_USAGE_RECOVERY="\
+${INDENT_COLON_32:0:4}timemachine -ts"
+#
+# timemachine file example=task
+#                  example=history
+#                  example=
+TM_USAGES=${TM_USAGES_TITLE}${ECHO_LF}${TM_USAGE_BACKUP_TITLE}${ECHO_LF}${TM_USAGE_BACKUP}${ECHO_LF}${TM_USAGE_RECOVERY_TITLE}${ECHO_LF}${TM_USAGE_RECOVERY}
+#echo -e ${TM_USAGES}
+# Load timemachine file.
+#
+
+#model_load timemachine.d/timemachine.tf
+
+#echo "SHELL_CONTEXT: "${SHELL_CONTEXT[name]}
+#echo "SHELL_CONTEXT: "${SHELL_CONTEXT[value]}
+#echo "SHELL_CONTEXT: "${SHELL_CONTEXT[path]}
+
+#echo "SHELL_MODEL: "${SHELL_MODEL[1]:="Element NULL"}
+#echo "SHELL_MODEL: "${SHELL_MODEL[6]:="Element NULL"}
+#echo "SHELL_MODEL: "${SHELL_MODEL[7]:="Element NULL"}
+#echo "SHELL_MODEL: "${SHELL_MODEL[8]:="Element NULL"}
+#exit
+# auto run:
+#    #crontab
+#    systemd-timers
+
+# 判断调用源 
+#  一 定时任务
+#  二 用户调用
+#     获取同步参数
+#       alpine
+#       element
+#       formats
+#       daw_templates
+# 待办：
+#     .ssh 
+#     .vim 
+#     .wsl
+
+#  sudo mkdir base && sudo mv !(base) base || ln -s base current
+
+if   [ "windows"  = "$1" ];then
+SOURCE_DIRS="/mnt/d/CORE_WEB_SYSTEM_COURSES /mnt/d/CORE_WEB_SYSTEM_CUBE    /mnt/d/CORE_WEB_SYSTEM_DAW   /mnt/d/CORE_WEB_SYSTEM_FONTS /mnt/d/CORE_WEB_SYSTEM_GEMMA   \
+             /mnt/d/CORE_WEB_SYSTEM_ICONS   /mnt/d/CORE_WEB_SYSTEM_ISO     /mnt/d/CORE_WEB_SYSTEM_KVM   /mnt/d/CORE_WEB_SYSTEM_LINUX /mnt/d/CORE_WEB_SYSTEM_LLAMA   \
+             /mnt/d/CORE_WEB_SYSTEM_LINUX   /mnt/d/CORE_WEB_SYSTEM_MESA    /mnt/d/CORE_WEB_SYSTEM_MINGW /mnt/d/CORE_WEB_SYSTEM_NOTES /mnt/d/CORE_WEB_SYSTEM_PHI     \
+             /mnt/d/CORE_WEB_SYSTEM_SAMPLES /mnt/d/CORE_WEB_SYSTEM_SOURCES /mnt/d/CORE_WEB_SYSTEM_STM   /mnt/d/CORE_WEB_SYSTEM_TOOLCHAIN /mnt/d/CORE_WEB_SYSTEM_TTS \
+             /mnt/d/CORE_WEB_SYSTEM_UEFI    /mnt/d/CORE_WEB_SYSTEM_VMS     /mnt/d/CORE_WEB_SYSTEM_VST"
+TIMEMACHINE_DIR="/mnt/f"
+    for SOURCE_DIR in ${SOURCE_DIRS}
+    do
+        TIMESTAMP=`date "+%Y-%m-%dT%H-%M-%S"`
+        echo TIMESTAMP:${TIMESTAMP}
+        echo SOURCE_DIR:${SOURCE_DIR}
+        TARGET_DIR=${TIMEMACHINE_DIR}/$(basename ${SOURCE_DIR})
+        echo TARGET_DIR:${TARGET_DIR}
+        echo LINK_DEST:`ls -lh ${TARGET_DIR}/current`
+        echo TARGET_PATH:${TARGET_DIR}/${TIMESTAMP}
+        rsync -avPh --delete --link-dest="${TARGET_DIR}/current" ${SOURCE_DIR}/ ${TARGET_DIR}/${TIMESTAMP} >> ${TARGET_DIR}/log/$TIMESTAMP.log
+        if [ "$?" = 0 ]; then
+            # Remove link to current backup
+            rm -f ${TARGET_DIR}/current
+            # Create link to the newest backup
+            ln -s ${TARGET_DIR}/${TIMESTAMP} ${TARGET_DIR}/current
+        else
+            # Rename directory if failed
+            mv ${TARGET_DIR}/${TIMESTAMP} ${TARGET_DIR}/FAILED-$TIMESTAMP
+        fi
+    done
+
+    exit
+elif [ "llama" = "$1" ];then
+SOURCE_DIRS="/volumes/llama"
+TIMEMACHINE_DIR="/volumes/gemma/Timemachine.llama"
+    for SOURCE_DIR in ${SOURCE_DIRS}
+    do
+        TIMESTAMP=`date "+%Y-%m-%dT%H-%M-%S"`
+        echo TIMESTAMP:${TIMESTAMP}
+        echo SOURCE_DIR:${SOURCE_DIR}
+        TARGET_DIR=${TIMEMACHINE_DIR}
+        echo TARGET_DIR:${TARGET_DIR}
+        echo LINK_DEST:`ls -lh ${TARGET_DIR}/current`
+        echo TARGET_PATH:${TARGET_DIR}/${TIMESTAMP}
+        rsync -avPh --delete --link-dest=$TARGET_DIR/current ${SOURCE_DIR}/ ${TARGET_DIR}/${TIMESTAMP} >> ${TARGET_DIR}/log/$TIMESTAMP.log
+        if [ "$?" = 0 ]; then
+            # Remove link to current backup
+            rm -f ${TARGET_DIR}/current
+            # Create link to the newest backup
+            ln -s ${TARGET_DIR}/${TIMESTAMP} ${TARGET_DIR}/current
+        else
+            # Rename directory if failed
+            mv ${TARGET_DIR}/${TIMESTAMP} ${TARGET_DIR}/FAILED-$TIMESTAMP
+        fi
+    done
+    exit
+elif [ "allinone" = "$1" ];then
+SOURCE_DIRS="/volumes/llama"
+TIMEMACHINE_DIR="/volumes/gemma/Timemachine.llama"
+    for SOURCE_DIR in ${SOURCE_DIRS}
+    do
+        TIMESTAMP=`date "+%Y-%m-%dT%H-%M-%S"`
+        echo TIMESTAMP:${TIMESTAMP}
+        echo SOURCE_DIR:${SOURCE_DIR}
+        TARGET_DIR=${TIMEMACHINE_DIR}/$(basename ${SOURCE_DIR})
+        echo TARGET_DIR:${TARGET_DIR}
+        echo LINK_DEST:`ls -lh ${TARGET_DIR}/current`
+        echo TARGET_PATH:${TARGET_DIR}/${TIMESTAMP}
+        rsync -avPh --delete --link-dest=$TARGET_DIR/current ${SOURCE_DIR}/ ${TARGET_DIR}/${TIMESTAMP} >> ${TARGET_DIR}/log/$TIMESTAMP.log
+        if [ "$?" = 0 ]; then
+            # Remove link to current backup
+            rm -f ${TARGET_DIR}/current
+            # Create link to the newest backup
+            ln -s ${TARGET_DIR}/${TIMESTAMP} ${TARGET_DIR}/current
+        else
+            # Rename directory if failed
+            mv ${TARGET_DIR}/${TIMESTAMP} ${TARGET_DIR}/FAILED-$TIMESTAMP
+        fi
+    done
+    exit
+fi
+echo "done!"
+exit
+
+if [ "cron" = "$1" ];then
+echo "------------------------------- TIMEMACHINE  BEGIN $(date '+%F-%T')---------------------------------"    >> /mnt/f/CORE_WEB_SYSTEM_TIMEMACHINE/log/"$(date '+%F-%T')".log
+rsync -auv /home/sparrow                      /mnt/f/CORE_WEB_SYSTEM_TIMEMACHINE/CORE_WEB_SYSTEM_WSL           >> /mnt/f/CORE_WEB_SYSTEM_TIMEMACHINE/log/"$(date '+%F-%T')".log
+rsync -auv /etc                               /mnt/f/CORE_WEB_SYSTEM_TIMEMACHINE/CORE_WEB_SYSTEM_WSL           >> /mnt/f/CORE_WEB_SYSTEM_TIMEMACHINE/log/"$(date '+%F-%T')".log
+rsync -auv /usr/local                         /mnt/f/CORE_WEB_SYSTEM_TIMEMACHINE/CORE_WEB_SYSTEM_WSL           >> /mnt/f/CORE_WEB_SYSTEM_TIMEMACHINE/log/"$(date '+%F-%T')".log
+#AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup
+#rsync -auv /mnt/c/Users/sparrow               /mnt/f/CORE_WEB_SYSTEM_WIN                                    >> /mnt/f/CORE_WEB_SYSTEM_TIMEMACHINE/log/"$(date '+%F-%T')".log
+rsync -auv /mnt/c/Users/sparrow/.ssh          /mnt/f/CORE_WEB_SYSTEM_TIMEMACHINE/CORE_WEB_SYSTEM_WIN/sparrow/  >> /mnt/f/CORE_WEB_SYSTEM_TIMEMACHINE/log/"$(date '+%F-%T')".log
+rsync -auv /mnt/c/Users/sparrow/.gitconfig    /mnt/f/CORE_WEB_SYSTEM_TIMEMACHINE/CORE_WEB_SYSTEM_WIN/sparrow/  >> /mnt/f/CORE_WEB_SYSTEM_TIMEMACHINE/log/"$(date '+%F-%T')".log
+rsync -auv /mnt/c/Users/sparrow/.wslconfig    /mnt/f/CORE_WEB_SYSTEM_TIMEMACHINE/CORE_WEB_SYSTEM_WIN/sparrow/  >> /mnt/f/CORE_WEB_SYSTEM_TIMEMACHINE/log/"$(date '+%F-%T')".log
+rsync -auv /mnt/d/CORE_WEB_SYSTEM_WEB/alpine  /mnt/f/CORE_WEB_SYSTEM_WEB/                                      >> /mnt/f/CORE_WEB_SYSTEM_TIMEMACHINE/log/"$(date '+%F-%T')".log
+rsync -auv /mnt/d/CORE_WEB_SYSTEM_WEB/element /mnt/f/CORE_WEB_SYSTEM_WEB/                                      >> /mnt/f/CORE_WEB_SYSTEM_TIMEMACHINE/log/"$(date '+%F-%T')".log
+rsync -auv /mnt/d/CORE_WEB_SYSTEM_WEB/make    /mnt/f/CORE_WEB_SYSTEM_WEB/                                      >> /mnt/f/CORE_WEB_SYSTEM_TIMEMACHINE/log/"$(date '+%F-%T')".log
+rsync -auv /mnt/d/CORE_WEB_SYSTEM_WEB/formats /mnt/f/CORE_WEB_SYSTEM_WEB/                                      >> /mnt/f/CORE_WEB_SYSTEM_TIMEMACHINE/log/"$(date '+%F-%T')".log
+rsync -auv /mnt/d/CORE_WEB_SYSTEM_DAW/DAW     /mnt/f/CORE_WEB_SYSTEM_DAW/                                      >> /mnt/f/CORE_WEB_SYSTEM_TIMEMACHINE/log/"$(date '+%F-%T')".log
+rsync -auv /mnt/d/CORE_WEB_SYSTEM_DAW/DSP     /mnt/f/CORE_WEB_SYSTEM_DAW/                                      >> /mnt/f/CORE_WEB_SYSTEM_TIMEMACHINE/log/"$(date '+%F-%T')".log
+rsync -auv /mnt/d/CORE_WEB_SYSTEM_DAW/SDK     /mnt/f/CORE_WEB_SYSTEM_DAW/                                      >> /mnt/f/CORE_WEB_SYSTEM_TIMEMACHINE/log/"$(date '+%F-%T')".log
+#rsync -auv /mnt/d/CORE_WEB_SYSTEM_VST         /mnt/e/                                                          >> /mnt/f/CORE_WEB_SYSTEM_TIMEMACHINE/log/"$(date '+%F-%T')".log
+#rsync -auv /mnt/e/CORE_WEB_SYSTEM_VST/"Virtual Hard Disks"/VSTToolchain.vhdx /mnt/e/CORE_WEB_SYSTEM_VST/       >> /mnt/f/CORE_WEB_SYSTEM_TIMEMACHINE/log/"$(date '+%F-%T')".log
+#rsync -auv /mnt/e/CORE_WEB_SYSTEM_VST/"Virtual Hard Disks"/VSTTemplates.vhdx /mnt/e/CORE_WEB_SYSTEM_VST/       >> /mnt/f/CORE_WEB_SYSTEM_TIMEMACHINE/log/"$(date '+%F-%T')".log
+rsync -auv /mnt/d/CORE_WEB_SYSTEM_APOLLO      /mnt/f/                                                          >> /mnt/f/CORE_WEB_SYSTEM_TIMEMACHINE/log/"$(date '+%F-%T')".log
+rsync -auv /mnt/d/CORE_WEB_SYSTEM_MINGW       /mnt/f/                                                          >> /mnt/f/CORE_WEB_SYSTEM_TIMEMACHINE/log/"$(date '+%F-%T')".log
+rsync -auv /mnt/d/CORE_WEB_SYSTEM_SAMPLES     /mnt/f/                                                          >> /mnt/f/CORE_WEB_SYSTEM_TIMEMACHINE/log/"$(date '+%F-%T')".log
+rsync -auv /mnt/d/CORE_WEB_SYSTEM_NOTES       /mnt/f/                                                          >> /mnt/f/CORE_WEB_SYSTEM_TIMEMACHINE/log/"$(date '+%F-%T')".log
+rsync -auv /mnt/d/CORE_WEB_SYSTEM_STM         /mnt/f/                                                          >> /mnt/f/CORE_WEB_SYSTEM_TIMEMACHINE/log/"$(date '+%F-%T')".log
+echo "------------------------------- TIMEMACHINE  END $(date '+%F-%T')-----------------------------------"    >> /mnt/f/CORE_WEB_SYSTEM_TIMEMACHINE/log/"$(date '+%F-%T')".log
+
+# https://samuelhewitt.com/blog/2018-06-05-time-machine-style-backups-with-rsync
+# https://github.com/cytopia/linux-timemachine/blob/master/timemachine
+# https://github.com/laurent22/rsync-time-backup
+# 需提前创建目标目录
+# 需提前创建日志目录
+# 需注意权限问题 
+#rsync -auv --delete --link-dest=/mnt/f/CORE_WEB_SYSTEM_TIMEMACHINE/TIMEMACHINE/current /mnt/d/CORE_WEB_SYSTEM_TIMEMACHINE/ /mnt/f/CORE_WEB_SYSTEM_TIMEMACHINE/TIMEMACHINE/"$(date '+%Y-%m-%dT%H-%M-%S')" >> /mnt/f/CORE_WEB_SYSTEM_TIMEMACHINE/log/"$(date '+%Y-%m-%dT%H-%M-%S')".log
+#if [ "$?" = 0 ]; then
+ #   # Remove link to current backup
+ #   rm -f /mnt/f/CORE_WEB_SYSTEM_TIMEMACHINE/TIMEMACHINE/current
+ #   # Create link to the newest backup
+ #   ln -s /mnt/f/CORE_WEB_SYSTEM_TIMEMACHINE/TIMEMACHINE/"$(date '+%Y-%m-%dT%H-%M-%S')" /mnt/f/CORE_WEB_SYSTEM_TIMEMACHINE/TIMEMACHINE/current
+#else
+#    # Rename directory if failed
+#    mv /mnt/f/CORE_WEB_SYSTEM_TIMEMACHINE/TIMEMACHINE/"$(date '+%Y-%m-%dT%H-%M-%S')" /mnt/f/CORE_WEB_SYSTEM_TIMEMACHINE/TIMEMACHINE/FAILED-"$(date '+%Y-%m-%dT%H-%M-%S')"
+#fi
+# alpine
+elif [ "alpine"  = "$1" ];then
+    echo alpine
+# element
+elif [ "element" = "$1" ];then
+    echo element
+# formats
+elif [ "formats" = "$1" ];then
+    echo formats
+fi
+
+
+-------- wsl-tm --------
+#! /bin/bash
+# https://samuelhewitt.com/blog/2018-06-05-time-machine-style-backups-with-rsync
+# 需提前创建目标目录
+# 需提前创建日志目录
+# 需注意权限问题
+TM_TIME=`date '+%Y-%m-%dT%H-%M-%S'`
+TM_SOURCE=
+TM_TARGET=
+# log with --log-file 
+#rsync -auv --delete --link-dest=/mnt/f/CORE_WEB_SYSTEM_TIMEMACHINE/TIMEMACHINE/current /mnt/d/CORE_WEB_SYSTEM_TIMEMACHINE/ /mnt/f/CORE_WEB_SYSTEM_TIMEMACHINE/TIMEMACHINE/$TM_TIME >> /mnt/f/CORE_WEB_SYSTEM_TIMEMACHINE/log/$TM_TIME.log
+#if [ "$?" = 0 ]; then
+#    # Remove link to current backup
+#    rm -f /mnt/f/CORE_WEB_SYSTEM_TIMEMACHINE/TIMEMACHINE/current
+#    # Create link to the newest backup
+#    ln -s /mnt/f/CORE_WEB_SYSTEM_TIMEMACHINE/TIMEMACHINE/$TM_TIME /mnt/f/CORE_WEB_SYSTEM_TIMEMACHINE/TIMEMACHINE/current
+#else
+#    # Rename directory if failed
+#    mv /mnt/f/CORE_WEB_SYSTEM_TIMEMACHINE/TIMEMACHINE/$TM_TIME /mnt/f/CORE_WEB_SYSTEM_TIMEMACHINE/TIMEMACHINE/FAILED-$TM_TIME
+#fi

@@ -1,0 +1,1 @@
+./llama.cpp/build/bin/llama-server -m ~/llama/train-text-from-scratch.phi --host 0.0.0.0 --port 8080 -ngl 34

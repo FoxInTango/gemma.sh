@@ -1,0 +1,31 @@
+echo -e "::::include/expand \e[34m:\e[0m"
+case $1 in
+    expand)
+        if [ ! -L ${shell_cmd} ];then
+            if [ ${SHELL_EXPAND_SUFFIX} ]; then
+                for s in ${SHELL_EXPAND_SUFFIX[@]}
+                do
+                    if [ -f ${shell_dir}/${shell_cmd}.$s ]; then
+                         echo "    ${shell_cmd}.$s has been expanded."
+                    else
+                        echo "    Creating symbolic link ${shell_dir}/${shell_cmd}.$s" 
+                        ln -s   ${shell_cmd} ${shell_dir}/${shell_cmd}.$s
+                    fi
+                done
+            else
+                echo -e "    \e[31mSHELL_EXPAND_SUFFIX not defined.\e[0m"
+                echo -e "    \e[34mSHELL_EXPAND_SUFFIX should be defined before . include/headers."
+                echo -e "    Such as:"
+                echo -e "        SHELL_EXPAND_SUFFIX=("alisa1" "alisa2" "alisa3" "....")\e[0m"
+                
+            fi
+        else
+            echo "    Command called by a symbol link."
+            echo "    Shell expanding only work by calling original command."
+        fi
+    ;;
+    *)
+    echo "    PASS."
+    ;;
+esac
+echo "::::include/expand END"

@@ -1,0 +1,12 @@
+# shell context
+echo -e "::::include/context \e[34m:\e[0m"
+
+declare -A SHELL_CONTEXT=(
+    ["name"]="context"
+    ["path"]="shellpath"
+    ["value"]="nothing"
+  )
+
+
+echo "    PASS."
+echo "::::include/context END"

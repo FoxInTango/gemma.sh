@@ -1,0 +1,11 @@
+#!/usr/bin/bash
+shell_cmd=$(basename $0)
+shell_dir=$(dirname  $0)
+shell_pwd=$(pwd)
+
+. ${shell_dir}/include/headers
+
+# trace build flow
+#
+# me.note/CoreVM/Linux.内核精简.md
+# 问问Gemma，内核编译过程中都会调用哪些命令.

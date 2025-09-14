@@ -1,0 +1,67 @@
+#!/bin/bash
+if [ ! $1 ];then
+    echo "Username required."
+    echo "Exit."
+    exit
+fi
+
+# User Name 
+
+USERNAME=$1
+
+sudo pacman -S alsa-utils
+
+echo "Installing VM tools"
+
+sudo pacman -S qemu              \
+               qemu-hw-usb-host  \
+               dnsmasq           \
+               libvirt           \
+               swtpm             \
+               ovmf #vde2 Virtual Distributed Ethernet for emulators like qemu
+# vnc   kvm
+# spice kvm
+# virtual machine manager.
+
+
+echo "Making libvird.service enabled ..."
+
+sudo systemctl enable --now libvirtd
+sudo systemctl status libvirtd
+
+# Apply group permissions to the user
+sudo usermod -aG libvirt,kvm ${USERNAME}
+
+# Create config directory and append configuration
+DESTINATION="/home/${USERNAME}/.config/libvirt"
+sudo mkdir -p ${DESTINATION}
+sudo sh -c "echo 'uri_default = \"qemu:///system\"' >> \"${DESTINATION}/libvirt.conf\""
+sudo chown -R ${USERNAME}:${USERNAME} ${DESTINATION}
+
+echo "Creating network bridge"
+
+echo "Now,time to install vendor reset and ensure it'll be load early."
+echo "/etc/modules"
+echo "/etc/mkinitcpio.conf"
+echo "grub.cfg : rd.driver.pre=vendor-reset rd.driver.pre=vfio-pci "
+echo "cp qemu hook /etc/libvirt/hooks/qemu"
+echo "cp vendor-reset udev-hook to /etc/udev/rules.d"
+
+echo "performance ."
+echo "isolate cpus with kernel cmdline -- grub.cfg"
+echo "enable hugepage -- vmh-hugepage"
+echo "mouse sudo pacman -S gpm"
+echo "systemctl *** gpm "
+echo "VConsole and Keyboard : "
+echo "https://wiki.archlinux.org/title/Linux_console/Keyboard_configuration"
+echo "localectl status"
+echo "localectl list-keymaps"
+echo "/etc/vconsole.conf : KEYMAP=uk"
+# https://wiki.archlinux.org/title/Network_bridge
+# https://man.archlinux.org/man/veth.4.en
+# https://www.cnblogs.com/bakari/p/10613710.html
+#sudo pacman -S reflector # pacman mirrorlist
+#systemctl status firewalld
+#systemctl status iptables
+#systemctl status nftables *** enable
+#sudo nft add rule inet filter input tcp dport { 80, 443 } acceptsudo nft add rule inet filter input tcp dport { 80,8080 }

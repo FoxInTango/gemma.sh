@@ -1,0 +1,39 @@
+#!/usr/bin/bash
+shell_cmd=$(basename $0)
+shell_dir=$(dirname  $0)
+shell_pwd=$(pwd)
+
+. ${shell_dir}/include/headers
+
+LLM_MODEL_PATH=/volumes/llama/llm.models
+
+LLAMA_BIN_PATH_0314=/volumes/llama/llm.cpp/llama.cpp/build.03.14/bin
+LLAMA_LIB_PATH_0314=/volumes/llama/llm.cpp/llama.cpp/build.03.14/bin
+LLAMA_BIN_PATH_0305=/volumes/llama/llm.cpp/llama.cpp/build.03.05/bin
+LLAMA_LIB_PATH_0305=/volumes/llama/llm.cpp/llama.cpp/build.03.05/bin
+
+case ${shell_cmd} in
+    ai.gemma)
+    LD_LIBRARY_PATH=${LLAMA_LIB_PATH_0314}:$LD_LIBRARY_PATH ${LLAMA_BIN_PATH_0314}/llama-server -m ${LLM_MODEL_PATH}/gemma-3-12b-it-Q4_K_M.gguf --host 0.0.0.0 --port 8081 -ngl 42 #-t 36 #-c 8192 #-b 16 #--mlock --no-mmap
+    ;;
+    ai.llama)
+    LD_LIBRARY_PATH=${LLAMA_LIB_PATH_0314}:$LD_LIBRARY_PATH ${LLAMA_BIN_PATH_0314}/llama-server -m ${LLM_MODEL_PATH}/meta-llama-3.1-8b-instruct-q4_0.gguf --host 0.0.0.0 --port 8082 -ngl 42 -t 32 -c 8192 -b 32 #--mlock --no-mmap
+    ;;
+    ai.phi)
+    LD_LIBRARY_PATH=${LLAMA_LIB_PATH_0305}:$LD_LIBRARY_PATH ${LLAMA_BIN_PATH_0305}/llama-server -m ${LLM_MODEL_PATH}/Phi-4-Q4.gguf --host 0.0.0.0 --port 8080 -ngl 34 #-t 32 -c 8192 -b 32
+    ;;
+    ai.phi.15b)
+    LD_LIBRARY_PATH=${LLAMA_LIB_PATH_0305}:$LD_LIBRARY_PATH ${LLAMA_BIN_PATH_0305}/llama-server -m ${LLM_MODEL_PATH}/Phi-15B-4-Q4_K_M.gguf --host 0.0.0.0 --port 9090 -ngl 34
+    ;;
+    ai.phi.mini)
+    LD_LIBRARY_PATH=${LLAMA_LIB_PATH_0305}:$LD_LIBRARY_PATH ${LLAMA_BIN_PATH_0305}/llama-server -m ${LLM_MODEL_PATH}/Phi-4-mini-Q4_K_M.gguf --host 0.0.0.0 --port 8083 -ngl 64 #-t 32 -c 8192 -b 32
+    ;;
+    *)
+    ;;
+esac
+##./llama.cpp/build/bin/llama-server -m ~/llama/train-text-from-scratch.phi --host 0.0.0.0 --port 8080 -ngl 34
+
+# D:\CORE_WEB_SYSTEM_LLM\llama.cpp.20250715\build.20250716\bin\Release\llama-server -m C:\llm.models\InternVL3-8B-Instruct-Q8_0.gguf --mmproj C:\llm.models\mmproj-InternVL3-8B-Instruct-Q8_0.gguf  --ctx-size 0 -ngl 64 --host 0.0.0.0 --port 8080 --device Vulkan1
+# D:\CORE_WEB_SYSTEM_LLM\llama.cpp.20250715\build.20250716\bin\Release\llama-server -m C:\llm.models\InternVL3-8B-Instruct-Q8_0.gguf --mmproj C:\llm.models\mmproj-InternVL3-8B-Instruct-Q8_0.gguf --no-mmproj-offload --ctx-size 65536 -ngl 64 --host 0.0.0.0 --port 8080 --device Vulkan1
+# D:\CORE_WEB_SYSTEM_LLM\llama.build.20250807\bin\Release\llama-server -m C:\llm.models\gemma-3-270m-it-Q8_0.gguf --ctx-size 8192 -ngl 64 --host 0.0.0.0 --port 8080 --device Vulkan1
+# D:\CORE_WEB_SYSTEM_LLM\llama.cpp.20250715\build.20250716\bin\Release\llama-server -m C:\llm.models\gemma-3-4b-it-Q8_0.gguf --mmproj C:\llm.models\gemma-3-4b-it-mmproj-f16.gguf --no-mmproj-offload --ctx-size 65536 -ngl 64 --host 0.0.0.0 --port 8080 --device Vulkan1

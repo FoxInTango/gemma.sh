@@ -1,0 +1,11 @@
+#!/usr/bin/bash
+shell_cmd=$(basename $0)
+shell_dir=$(dirname  $0)
+shell_pwd=$(pwd)
+
+echo "shell_cmd is : ${shell_cmd}"
+echo "shell_dir is : ${shell_dir}"
+echo "shell_pwd is : ${shell_pwd}" 
+
+
+export PATH=${shell_dir}:$PATH

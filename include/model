@@ -1,0 +1,67 @@
+# 允许特殊字符
+#line_regex="([a-zA-Z0-9_]+=[^ ]+) +([a-zA-Z0-9_]+=[^ ]+)*$"
+# 不允许特殊字符
+# 等号左边允许的特殊字符 ${}[]
+# 等号右边允许的特殊字符 ${}[]
+line_regex="([a-zA-Z0-9_]+=[^ ]+) +([a-zA-Z0-9_]+=[a-zA-Z0-9_$}{\-]+)*$"
+declare -A SHELL_MODEL
+
+function model_load()
+{
+    if [ -f $1 ]; then
+        echo "Loading Model File : $1 ..."
+        declare -i ln=1 
+        while read -r line; do
+            if [[ ${line} =~ ${line_regex} ]]; then
+                SHELL_MODEL["${ln}"]="${line}"
+                echo "[Y]第${ln}行: ${line}"
+            else
+                echo "[N]第${ln}行: ${line}"
+            fi
+            ln+=1
+        done < $1
+        echo "Model File Loaded"
+        return 0
+    else
+        echo "File not found : $1"
+        return 1
+    fi
+    return 1
+}
+#
+# $(model_load map model.mf)
+function model_load(){
+	exit
+}
+
+# $(model_save map model.mf)
+function model_save(){
+    exit
+}
+
+# $(model_get map key | key[~][~])
+function model_get(){
+    exit
+}
+
+# $(model_set map key | key[~][~] value)
+function model_set(){
+    exit
+}
+
+# $(model_insert key value | value[])
+function model_insert(){
+    local v=$2
+    if [[ $v =~ ^[a-zA-Z]+\[\]$ ]]; then
+	    echo "object value"
+	    echo ${v%%[*}
+    else 
+	    echo "normal value"
+    fi
+}
+
+# $(model_remove key)
+function model_remove(){
+    exit
+}
+

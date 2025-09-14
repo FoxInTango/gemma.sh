@@ -1,0 +1,60 @@
+#!/usr/bin/bash
+shell_cmd=$(basename $0)
+shell_dir=$(dirname  $0)
+shell_pwd=$(pwd)
+
+. ${shell_dir}/include/headers
+
+if [ ${shell_cmd} == "bluetooth" ]; then
+    shell_cmd="bluetooth.echo"
+fi
+
+case ${shell_cmd} in
+    bluetooth.prepare) # https://wiki.archlinux.org/title/Bluetooth
+    case ${gemma_pack_man} in
+    gemma)
+    echo "Gemma Installing ::$1:: whith gemma"
+    sudo gemma install bluez alsa
+    ;;
+    pacman)
+    echo "Gemma Installing ::$1:: whith pacman"
+    sudo pacman -S bluez alsa libfdk-aac-dev
+    ;;
+    apt)
+    echo "Gemma Installing ::$1:: whith apt"
+    sudo apt install bluez alsa-utils alsa-base libbluetooth-dev libfdk-aac-dev libasound2-dev libdbus-1-dev libsbc-dev
+    ;;
+    dnf)
+    echo "Gemma Installing ::$1:: whith dnf"
+    sudo dnf install $1
+    ;;
+    yum)
+    echo "Gemma Installing ::$1:: whith yum"
+    sudo yum install $1
+    ;;
+    *)
+    ;;
+    esac
+    if [ ! -d ./downloads ]; then
+        mkdir ./downloads
+    fi
+    if [ ! -d ./downloads/bluez-alsa/.git ]; then
+    git clone https://github.com/arkq/bluez-alsa.git ./downloads/bluez-alsa
+    fi
+    cd ./downloads/bluez-alsa && autoreconf --install && ./configure && make && sudo make install
+    ;;
+    bluetooth.enable)
+    ;;
+    bluetooth.disable)
+    ;;
+    bluetooth.start)
+    ;;
+    bluetooth.stop)
+    ;;
+    bluetooth.echo)
+    echo "action should be selected as bluetooth.***"
+    ;;
+    *)
+    echo "I don't know what to do."
+    ;;
+esac

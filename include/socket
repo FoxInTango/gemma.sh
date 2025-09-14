@@ -1,0 +1,14 @@
+#!/usr/bin/bash
+
+shell_cmd=$(basename $0)
+shell_dir=$(dirname  $0)
+shell_pwd=$(pwd)
+
+echo "shell_cmd is : ${shell_cmd}"
+echo "shell_dir is : ${shell_dir}"
+echo "shell_pwd is : ${shell_pwd}" 
+
+# linux中有一个特殊的文件/dev/tcp,打开这个文件就类似于发出了一个socket调用，建立一个socket连接，读写这个文件就相当于在这个socket连接中传输数据。
+#    https://www.cnblogs.com/zl1991/p/12524924.html
+#    https://www.jianshu.com/p/a0451f72f31b  echo >/dev/tcp/8.8.8.8/53
+#    https://www.jianshu.com/p/f10736931b93

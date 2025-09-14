@@ -1,0 +1,14 @@
+#!/bin/bash
+
+pacman -S  base-devel cmake vulkan-icd-loader vulkan-radeon vulkan-tools vulkan-headers
+
+# pip install -r requirements.txt
+# cmake -S . -B build -DUSE_VULKAN=ON
+# cmake --build build
+
+
+# echo 'export VULKAN_ICD_FILENAMES=/usr/share/vulkan/icd.d/amdgpu_icd.x86_64.json' >> ~/.bashrc
+# source ~/.bashrc
+#cmake -S . -B build -DGGML_VULKAN=ON -D CMAKE_BUILD_TYPE=Release
+#sudo pacman -S vulkan-headers
+sudo pacman -S shaderc

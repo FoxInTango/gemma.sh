@@ -1,0 +1,60 @@
+# Author : Phi
+#
+# 原始参数
+echo -e "::::include/args \e[34m:\e[0m"
+echo "    shell_argc is : $#"
+echo "    shell_argv is : $@"
+echo "    shell_cmd  is : ${shell_cmd}"
+echo "    shell_dir  is : ${shell_dir}"
+echo "    shell_pwd  is : ${shell_pwd}"
+
+# 初始化变量
+declare -A params
+
+arg_regex="[a-zA-Z0-9]*=[a-zA-Z0-9/\.]+"
+
+# echo $@
+# 解析参数
+for arg in "$@"; do
+    if [[ $arg =~ ^${arg_regex}$ ]]; then
+        key="${arg%%=*}"
+        value="${arg##*=}"
+        params[$key]=$value
+	#echo "Wonderfull : k=${key} v=${value}"
+    elif [[ "$arg" =~ ^--${arg_regex}$ ]]; then
+        key="${arg%%=*}"
+        key="${key##--}"
+	
+	value="${arg##*=}"
+        params[$key]=$value 
+	#echo "Longparam : --k=${key} --v=${value}" 
+    elif [[ "$arg" =~ ^-${arg_regex}$ ]]; then
+        key="${arg%%=*}"
+        key="${key##-}"
+
+	value="${arg##*=}"
+        params[$key]=$value
+        #echo "Shortparam : -k=${key} -v=${value}"
+    else
+        if [[ ${arg} =~ ^[a-zA-Z0-9]*$ ]]; then
+            key="${arg}"
+            params[$key]=null
+            #echo "Wonderfull No value param : ${arg}"
+        elif [[ ${arg} =~  ^-[a-zA-Z0-9]*$ ]]; then
+            key="${arg##-}"
+            params[$key]=null
+            #echo "Shot No value param : ${arg}"
+        elif [[ ${arg} =~ ^--[a-zA-Z0-9]*$ ]]; then
+            key="${arg##--}"
+            params[$key]=null
+            #echo "Long No value param : ${arg}"
+        fi
+    fi
+done
+
+# 使用参数
+for key in "${!params[@]}"; do
+    echo "$key 的值是 ${params[$key]}"
+done
+
+echo "::::include/args END"

@@ -1,0 +1,11 @@
+#!/usr/bin/bash
+shell_cmd=$(basename $0)
+shell_dir=$(dirname  $0)
+shell_pwd=$(pwd)
+
+SHELL_EXPAND_SUFFIX=("alisa1" "alisa2" "alisa3")
+
+. ${shell_dir}/include/headers
+
+# host.prepare url=wf@allinone.io:~/host.repo.name
+#     -- git clone url shell_pwd/host

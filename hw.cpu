@@ -1,0 +1,49 @@
+#!/usr/bin/bash
+shell_cmd=$(basename $0)
+shell_dir=$(dirname  $0)
+shell_pwd=$(pwd)
+
+SHELL_EXPAND_SUFFIX=("alisa1" "alisa2" "alisa3")
+
+. ${shell_dir}/include/headers
+
+declare -A Map
+
+#
+# $(model_load map model.mf)
+function model_load(){
+	exit
+}
+
+# $(model_save map model.mf)
+function model_save(){
+    exit
+}
+
+# $(model_get map key | key[~][~])
+function model_get(){
+    exit
+}
+
+# $(model_set map key | key[~][~] value)
+function model_set(){
+    exit
+}
+
+# $(model_insert key value | value[])
+function model_insert(){
+    local v=$2
+    if [[ $v =~ ^[a-zA-Z]+\[\]$ ]]; then
+	    echo "object value"
+	    echo ${v%%[*}
+    else 
+	    echo "normal value"
+    fi
+}
+
+# $(model_remove key)
+function model_remove(){
+    exit
+}
+
+model_insert key value[]

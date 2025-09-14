@@ -1,0 +1,2 @@
+LD_LIBRARY_PATH=./llama.cpp/build.03.05/bin/ ./llama.cpp/build.03.05/bin/llama-server -m ~/llama/llms/Phi-15B-4-Q4_K_M.gguf --host 0.0.0.0 --port 9090 -ngl 34
+#Phi-15B-4-Q4_K_M.gguf

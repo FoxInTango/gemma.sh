@@ -1,0 +1,58 @@
+#!/usr/bin/bash
+shell_cmd=$(basename $0)
+shell_dir=$(dirname  $0)
+shell_pwd=$(pwd)
+
+. ${shell_dir}/include/headers
+
+# 文本分类  --method=[regex | llama | gemma | phi] --class-file=./class.cf
+#    文件名称 --by=name
+#    文件内容 --by=content
+#    --class-file
+#    ai=phi | gemma | llama
+#    method=${regex | phi | gemma | llama} name=${method} regx=${regex-string}
+#    class=${class_name} dst=${path-to-dst-dir} method=${name | regex | phi | gemma | llama}
+#        class=${class_name} dst=${path-to-dst-dir} method=${name | regex | phi | gemma | llama}
+#        class=${class_name} dst=${path-to-dst-dir} method=${name | regex | phi | gemma | llama}
+#        class=${class_name} dst=${path-to-dst-dir} method=${name | regex | phi | gemma | llama}
+#    class=${class_name} dst=${path-to-dst-dir} method=${name | regex | phi | gemma | llama}
+#        class=${class_name} dst=${path-to-dst-dir} method=${name | regex | phi | gemma | llama}
+#        class=${class_name} dst=${path-to-dst-dir} method=${name | regex | phi | gemma | llama}
+# 文本提取
+# 文本替换
+# 文本插入
+# 
+# 文本向量
+
+URL=http://192.168.1.128:8083/
+API_V0=completion
+API_V1=v1/chat/completions
+
+content="把\`\`\` \`\`\`包含的内容进行分类，映射到[哲学 密码学 编程 数学 统计学]中，并用形如{content_id:id,class:classification}的纯粹JSON数据表达映射结果。\`\`\`contend_id:1001,content:$1\`\`\`"
+
+PROMPT=""
+PROMPT=${PROMPT}"{\"n_predict\":32,\"messages\":["
+PROMPT=${PROMPT}"{\"role\":\"system\",\"content\":\"你的名字叫llama，你是充满智慧的灵。你只输出用户要求的JSON数据\"},"
+PROMPT=${PROMPT}"{\"role\":\"user\",\"content\":\"${content}\"}"
+PROMPT=${PROMPT}"]"
+PROMPT=${PROMPT}"}"
+#PROMPT=${PROMPT}"把下面\`\`\` \`\`\`包含的内容做唯一分类映射，把内容类型映射到[哲学 密码学 编程 数学 统计学]中。并用形如{content_id:id,class:classification}的纯粹JSON数据表达映射结果"
+#PROMPT=${PROMPT}" \`\`\`content_id : 1001 ,content : $1 \`\`\` "
+
+case ${shell_cmd} in
+    txt.classify)
+    curl --request POST --url ${URL}${API_V1} --header  "Content-Type: application/json" -H "Authorization: Bearer no-key" --data "${PROMPT}"
+    ;;
+    txt.extract)
+    ;;
+    txt.replace)
+    ;;
+    txt.insert)
+    ;;
+    txt.vector)
+    ;;
+    *)
+    ;;
+esac
+
+ 

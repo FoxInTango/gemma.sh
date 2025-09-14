@@ -1,0 +1,15 @@
+#!/usr/bin/bash
+shell_cmd=$(basename $0)
+shell_dir=$(dirname  $0)
+shell_pwd=$(pwd)
+hostname=$(hostname)
+username=$(whoami)
+vendor=$(uname -a | grep WSL2)
+
+. ${shell_dir}/include/headers
+
+echo ${hostname}
+echo ${vendor}
+echo ${username}
+# host.prepare url=wf@allinone.io:~/host.repo.name
+#     -- git clone url shell_pwd/host

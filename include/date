@@ -1,0 +1,10 @@
+#date_str="2021-07-23-170950"
+#date_new="${date_str:0:10} ${date_str:11:2}:${date_str:13:2}:${date_str:15:2}"
+#echo "date str  : ${date_str}"
+#echo "date new  : ${date_new}"
+#echo "datestamp : $(date -d "$date_new" +%s)"
+
+function timestamp(){
+    #
+    echo $(date -d "$date_new" +%s)
+}

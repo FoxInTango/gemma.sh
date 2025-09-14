@@ -1,0 +1,58 @@
+#!/usr/bin/bash
+shell_cmd=$(basename $0)
+shell_dir=$(dirname  $0)
+shell_pwd=$(pwd)
+
+. ${shell_dir}/include/headers
+
+
+if [ ${shell_cmd} == "linux" ]; then
+    shell_cmd="linux.echo"
+fi
+
+function install_base(){
+    case ${gemma_pack_man} in
+        gemma)
+            echo "Gemma Installing ::$1:: with gemma"
+            sudo gemma install bluez alsa
+        ;;
+        pacman)
+            echo "Installing Basic Tools ..."
+            sudo pacman -S man vim wget curl openssl zip htop lm_sensors git usbutils dmidecode numactl cpio rsync nvme-cli     
+            echo "Installing Libraries ..."
+            sudo pacman -S libnvme libblockdev-nvme libblockdev
+        ;;
+        apt)
+            echo "Gemma Installing ::$1:: with apt"
+            sudo apt install man vim wget curl openssl zip htop lm_sensors git usbutils dmidecode numactl cpio rsync nvme-cli     
+        ;;
+        dnf)
+            echo "Gemma Installing ::$1:: with dnf"
+            sudo dnf install man vim wget curl openssl zip htop lm_sensors git usbutils dmidecode numactl cpio rsync nvme-cli     
+        ;;
+        yum)
+            echo "Gemma Installing ::$1:: with yum"
+            sudo yum install man vim wget curl openssl zip htop lm_sensors git usbutils dmidecode numactl cpio rsync nvme-cli     
+        ;;
+        *)
+            echo "Unknown Package Mangeer."
+        ;;
+    esac
+}
+
+function prepare_hugepages() {
+    echo "function prepare hugepages TO BE Done..."
+}
+
+case ${shell_cmd} in
+    linux.prepare)
+        install_base
+        prepare_hugepages
+    ;;
+    linux.echo)
+        echo "Action should be selected as linux.***" 
+    ;;
+    *)
+        echo "I won't know what to do."
+    ;;
+esac

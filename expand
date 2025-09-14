@@ -1,0 +1,11 @@
+#!/usr/bin/bash
+shell_cmd=$(basename $0)
+shell_dir=$(dirname  $0)
+shell_pwd=$(pwd)
+
+# example for expanding command
+#    ./command expand
+SHELL_EXPAND_SUFFIX=("alisa1" "alisa2" "alisa3")
+
+. ${shell_dir}/include/headers
+

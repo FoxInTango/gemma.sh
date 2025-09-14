@@ -1,0 +1,3 @@
+LD_LIBRARY_PATH=/volumes/llama/llm.cpp/llama.cpp/build.03.05/bin:$LD_LIBRARY_PATH /volumes/llama/llm.cpp/llama.cpp/build.03.05/bin/llama-server -m /volumes/llama/llm.models/Phi-4-mini-Q4_K_M.gguf --host 0.0.0.0 --port 8083 -ngl 64 #-t 32 -c 8192 -b 32 
+#./llama.cpp/build.03.05/bin/llama-server -m ~/llama/llms/Phi-4-mini-Q4_K_M.gguf --host 0.0.0.0 --port 8080 -ngl 32 
+#Phi-4-mini-Q4_K_M.gguf

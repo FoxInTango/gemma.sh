@@ -1,0 +1,6 @@
+#!/usr/bin/bash
+
+<< 'EOF' # 注释题目
+注释内容
+
+EOF

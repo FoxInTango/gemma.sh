@@ -1,0 +1,41 @@
+# package management
+
+gemma_known_pack_man=(gemma pacman apt dnf yum)
+gemma_pack_man=
+
+for item in "${gemma_known_pack_man[@]}"
+do
+    if [ -f /usr/bin/${item} ]; then
+        echo "gemma_pack_man is : ${item}"
+        gemma_pack_man="${item}"
+        break
+    fi
+done
+
+function gemma_package_install
+{
+case ${gemma_pack_man} in
+    gemma)
+    echo "Gemma Installing ::$1:: whith gemma"
+    sudo gemma install $1
+    ;;
+    pacman)
+    echo "Gemma Installing ::$1:: whith pacman"
+    sudo pacman -S $1
+    ;;
+    apt)
+    echo "Gemma Installing ::$1:: whith apt"
+    sudo apt install $1
+    ;;
+    dnf)
+    echo "Gemma Installing ::$1:: whith dnf"
+    sudo dnf install $1
+    ;;
+    yum)
+    echo "Gemma Installing ::$1:: whith yum"
+    sudo yum install $1
+    ;;
+    *)
+    ;;
+esac
+}

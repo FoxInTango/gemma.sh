@@ -1,0 +1,8 @@
+. ${shell_dir}/include/indent
+. ${shell_dir}/include/context
+. ${shell_dir}/include/args
+. ${shell_dir}/include/echo
+. ${shell_dir}/include/model
+. ${shell_dir}/include/date
+. ${shell_dir}/include/expand
+. ${shell_dir}/include/pm

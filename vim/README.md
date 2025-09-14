@@ -1,0 +1,1 @@
+[Vim---配置实用的.vimrc文件](https://www.cnblogs.com/XNQC1314/p/8692993.html)

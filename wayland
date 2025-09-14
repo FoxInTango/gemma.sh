@@ -1,0 +1,53 @@
+#!/usr/bin/bash
+shell_cmd=$(basename $0)
+shell_dir=$(dirname  $0)
+shell_pwd=$(pwd)
+
+. ${shell_dir}/include/headers
+
+
+if [ ${shell_cmd} == "wayland" ]; then
+    shell_cmd="wayland.echo"
+fi
+
+function install_base(){
+    case ${gemma_pack_man} in
+        gemma)
+            echo "Gemma Installing ::$1:: with gemma"
+            sudo gemma install libpixman libxkbcommon libdrm libdisplay-info
+        ;;
+        pacman)
+            echo "Installing Basic Tools ..."
+            sudo pacman -Syu pixman libdrm libdisplay-info libxkbcommon lcms2 seatd libliftoff libinput xcb-util-renderutil
+        ;;
+        apt)
+            echo "Gemma Installing ::$1:: with apt"
+            sudo apt install libpixman libxkbcommon libdrm libdisplay-info
+        ;;
+        dnf)
+            echo "Gemma Installing ::$1:: with dnf"
+            sudo dnf install libpixman libxkbcommon libdrm libdisplay-info
+        ;;
+        yum)
+            echo "Gemma Installing ::$1:: with yum"
+            sudo yum install libpixman libxkbcommon libdrm libdisplay-info
+        ;;
+        *)
+            echo "Unknown Package Mangeer."
+        ;;
+    esac
+}
+
+case ${shell_cmd} in
+    wayland.prepare)
+        install_base
+    ;;
+    wayland.echo)
+        echo "Action should be selected as wayland.***" 
+    ;;
+    *)
+        echo "I won't know what to do."
+    ;;
+esac
+
+
