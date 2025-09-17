@@ -1,0 +1,17 @@
+#!/usr/bin/bash
+shell_cmd=$(basename $0)
+shell_dir=$(dirname  $0)
+shell_pwd=$(pwd)
+
+. ${shell_dir}/include/headers
+
+case ${shell_cmd} in
+        shell.)
+        ;;
+        shell.)
+        ;;
+        *)
+        ;;
+esac
+# sudo systemctl enable --now systemd-timedated
+# sudo systemctl enable --now systemd-timesyncd
